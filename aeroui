@@ -5,14 +5,17 @@ local TextService = game:GetService("TextService")
 
 local function Create(class, props, children)
     local obj = Instance.new(class)
-    for k,v in pairs(props or {}) do obj[k] = v end
-    for _,c in pairs(children or {}) do c.Parent = obj end
+    for k,v in pairs(props or {}) do
+        obj[k] = v
+    end
+    for _,c in pairs(children or {}) do
+        c.Parent = obj
+    end
     return obj
 end
 
 local Library = {}
 Library.__index = Library
-
 Library.ToggleKey = Enum.KeyCode.RightShift
 
 function Library.SettingManager()
@@ -43,13 +46,11 @@ end
 
 function Library:New(config)
     local self = setmetatable({}, Library)
-    
     self.Gui = Create("ScreenGui", {
         Name = "DcusHub_v2.3 UI",
         ResetOnSpawn = false,
         Parent = gethui()
     })
-
     self.Main = Create("Frame", {
         Size = UDim2.fromOffset(550, 380),
         Position = UDim2.fromScale(0.5, 0.5),
@@ -61,7 +62,6 @@ function Library:New(config)
         Create("UICorner", {CornerRadius = UDim.new(0, 12)}),
         Create("UIStroke", {Color = Color3.fromRGB(45, 45, 60), Thickness = 1.5})
     })
-
     self.Top = Create("Frame", {
         Size = UDim2.new(1, 0, 0, 55),
         BackgroundColor3 = Color3.fromRGB(20, 20, 28),
@@ -75,7 +75,6 @@ function Library:New(config)
             BorderSizePixel = 0,
         })
     })
-
     Create("TextLabel", {
         Text = config.Title or "Dcus Hub",
         Font = Enum.Font.GothamBold,
@@ -87,7 +86,6 @@ function Library:New(config)
         Size = UDim2.new(0, 200, 0, 30),
         Parent = self.Top
     })
-
     Create("TextLabel", {
         Text = config.Footer or "Premium Interface • v2.3",
         Font = Enum.Font.GothamMedium,
@@ -117,9 +115,7 @@ function Library:New(config)
     end
 
     local MinimizeBtn = createControlButton("−", -80, function() end, Color3.fromRGB(220,180,60))
-    local CloseBtn    = createControlButton("×", -45, function()
-        self.Gui:Destroy()
-    end, Color3.fromRGB(220,70,70))
+    local CloseBtn = createControlButton("×", -45, function() self.Gui:Destroy() end, Color3.fromRGB(220,70,70))
 
     local IsMinimized = false
     local IsOpen = true
@@ -128,38 +124,20 @@ function Library:New(config)
         if IsMinimized then return end
         IsMinimized = true
         IsOpen = false
-
-        TweenService:Create(self.Main, TweenInfo.new(0.36, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-            Size = UDim2.fromOffset(280, 52),
-            Position = UDim2.new(0.5, -140, 0, 18),
-            AnchorPoint = Vector2.new(0.5, 0)
-        }):Play()
-
-        task.delay(0.15, function()
-            if IsMinimized then
-                self.Container.Visible = false
-            end
+        local tween = TweenService:Create(self.Main, TweenInfo.new(0.36, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), { Position = UDim2.new(0.5, 0, -0.5, 0) })
+        tween:Play()
+        tween.Completed:Connect(function()
+            self.Main.Visible = false
         end)
-
-        self:Notify({
-            Title = "UI Minimized",
-            Content = "Right Shift to reopen",
-            Time = 6
-        })
+        self:Notify({ Title = "UI Minimized", Content = "Right Shift to reopen", Time = 6 })
     end
 
     local function restoreUI()
         if not IsMinimized then return end
         IsMinimized = false
         IsOpen = true
-
-        self.Container.Visible = true
-
-        TweenService:Create(self.Main, TweenInfo.new(0.42, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-            Size = UDim2.fromOffset(550, 380),
-            Position = UDim2.fromScale(0.5, 0.5),
-            AnchorPoint = Vector2.new(0.5, 0.5)
-        }):Play()
+        self.Main.Visible = true
+        TweenService:Create(self.Main, TweenInfo.new(0.42, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), { Position = UDim2.fromScale(0.5, 0.5) }):Play()
     end
 
     MinimizeBtn.MouseButton1Click:Connect(minimizeUI)
@@ -253,13 +231,11 @@ function Library:New(config)
         local title = config.Title or "Notification"
         local content = config.Content or ""
         local duration = config.Time or 5
-
         local NotifGui = gethui():FindFirstChild("DcusNotifications") or Create("ScreenGui", {
             Name = "DcusNotifications",
             Parent = gethui(),
             ZIndexBehavior = Enum.ZIndexBehavior.Sibling
         })
-
         local Holder = NotifGui:FindFirstChild("NotifHolder") or Create("Frame", {
             Name = "NotifHolder",
             Parent = NotifGui,
@@ -274,7 +250,6 @@ function Library:New(config)
                 SortOrder = Enum.SortOrder.LayoutOrder
             })
         })
-
         local Notif = Create("Frame", {
             Size = UDim2.new(1, 0, 0, 0),
             BackgroundColor3 = Color3.fromRGB(22, 22, 32),
@@ -284,7 +259,6 @@ function Library:New(config)
             Create("UICorner", {CornerRadius = UDim.new(0, 10)}),
             Create("UIStroke", {Color = Color3.fromRGB(70, 140, 255), Thickness = 1.4, Transparency = 1})
         })
-
         local TitleLabel = Create("TextLabel", {
             Text = title:upper(),
             Font = Enum.Font.GothamBold,
@@ -297,7 +271,6 @@ function Library:New(config)
             TextXAlignment = Enum.TextXAlignment.Left,
             Parent = Notif
         })
-
         local ContentLabel = Create("TextLabel", {
             Text = content,
             Font = Enum.Font.GothamMedium,
@@ -312,30 +285,18 @@ function Library:New(config)
             TextWrapped = true,
             Parent = Notif
         })
-
         local textSize = TextService:GetTextSize(content, 13, Enum.Font.GothamMedium, Vector2.new(252, 9e9))
         local targetHeight = textSize.Y + 54
-
-        TweenService:Create(Notif, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-            Size = UDim2.new(1, 0, 0, targetHeight),
-            BackgroundTransparency = 0
-        }):Play()
+        TweenService:Create(Notif, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Size = UDim2.new(1, 0, 0, targetHeight), BackgroundTransparency = 0 }):Play()
         TweenService:Create(Notif.UIStroke, TweenInfo.new(0.5), {Transparency = 0.2}):Play()
         TweenService:Create(TitleLabel, TweenInfo.new(0.6), {TextTransparency = 0}):Play()
         TweenService:Create(ContentLabel, TweenInfo.new(0.7), {TextTransparency = 0}):Play()
-
         task.delay(duration, function()
-            TweenService:Create(Notif, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
-                Size = UDim2.new(1, 0, 0, 0),
-                BackgroundTransparency = 1
-            }):Play()
+            TweenService:Create(Notif, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.In), { Size = UDim2.new(1, 0, 0, 0), BackgroundTransparency = 1 }):Play()
             TweenService:Create(Notif.UIStroke, TweenInfo.new(0.5), {Transparency = 1}):Play()
             TweenService:Create(TitleLabel, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
             TweenService:Create(ContentLabel, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
-
-            task.delay(0.6, function()
-                Notif:Destroy()
-            end)
+            task.delay(0.6, function() Notif:Destroy() end)
         end)
     end
 
@@ -354,7 +315,9 @@ function Library:New(config)
             Position = UDim2.new(0, 10, 0.5, -2),
             BackgroundColor3 = Color3.fromRGB(150, 150, 170),
             Parent = TabBg
-        }, { Create("UICorner", {CornerRadius = UDim.new(1, 0)}) })
+        }, {
+            Create("UICorner", {CornerRadius = UDim.new(1, 0)})
+        })
         local TabBtn = Create("TextButton", {
             Text = name,
             Font = Enum.Font.GothamMedium,
@@ -373,15 +336,8 @@ function Library:New(config)
             CanvasSize = UDim2.new(0, 0, 0, 0),
             Parent = self.Pages
         }, {
-            Create("UIListLayout", {
-                Padding = UDim.new(0, 8),
-                SortOrder = Enum.SortOrder.LayoutOrder
-            }),
-            Create("UIPadding", {
-                PaddingTop = UDim.new(0, 2),
-                PaddingLeft = UDim.new(0, 2),
-                PaddingRight = UDim.new(0, 8)
-            })
+            Create("UIListLayout", { Padding = UDim.new(0, 8), SortOrder = Enum.SortOrder.LayoutOrder }),
+            Create("UIPadding", { PaddingTop = UDim.new(0, 2), PaddingLeft = UDim.new(0, 2), PaddingRight = UDim.new(0, 8) })
         })
         local UIListLayout = Page:FindFirstChildOfClass("UIListLayout")
         local function UpdateCanvasSize()
@@ -389,13 +345,14 @@ function Library:New(config)
         end
         UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(UpdateCanvasSize)
         task.spawn(UpdateCanvasSize)
+
         TabBtn.MouseButton1Click:Connect(function()
             self.TabHighlight.Visible = true
             local yPos = TabBg.AbsolutePosition.Y - self.Sidebar.AbsolutePosition.Y
-            TweenService:Create(self.TabHighlight, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-                Position = UDim2.fromOffset(8, yPos)
-            }):Play()
-            for _, p in pairs(self.Pages:GetChildren()) do if p:IsA("ScrollingFrame") then p.Visible = false end end
+            TweenService:Create(self.TabHighlight, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), { Position = UDim2.fromOffset(8, yPos) }):Play()
+            for _, p in pairs(self.Pages:GetChildren()) do
+                if p:IsA("ScrollingFrame") then p.Visible = false end
+            end
             for _, bg in pairs(self.TabHolder:GetChildren()) do
                 if bg:IsA("Frame") and bg:FindFirstChild("Frame") then
                     TweenService:Create(bg:FindFirstChildOfClass("TextButton"), TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(150, 150, 170)}):Play()
@@ -496,14 +453,12 @@ function Library:New(config)
                 Position = state and UDim2.fromOffset(22, 2) or UDim2.fromOffset(2, 2),
                 BackgroundColor3 = Color3.new(1, 1, 1),
                 Parent = Switch
-            }, { Create("UICorner", {CornerRadius = UDim.new(1, 0)}) })
+            }, {
+                Create("UICorner", {CornerRadius = UDim.new(1, 0)})
+            })
             local function updateView(val)
-                TweenService:Create(Switch, TweenInfo.new(0.2), {
-                    BackgroundColor3 = val and Color3.fromRGB(80, 150, 255) or Color3.fromRGB(40, 40, 55)
-                }):Play()
-                TweenService:Create(Knob, TweenInfo.new(0.2), {
-                    Position = val and UDim2.fromOffset(22, 2) or UDim2.fromOffset(2, 2)
-                }):Play()
+                TweenService:Create(Switch, TweenInfo.new(0.2), { BackgroundColor3 = val and Color3.fromRGB(80, 150, 255) or Color3.fromRGB(40, 40, 55) }):Play()
+                TweenService:Create(Knob, TweenInfo.new(0.2), { Position = val and UDim2.fromOffset(22, 2) or UDim2.fromOffset(2, 2) }):Play()
             end
             local Hit = Create("TextButton", {Text = "", BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), ZIndex = 5, Parent = TglBg})
             Hit.MouseButton1Click:Connect(function()
@@ -562,12 +517,16 @@ function Library:New(config)
                 Position = UDim2.new(0, 15, 1, -12),
                 BackgroundColor3 = Color3.fromRGB(40, 40, 55),
                 Parent = SliderBg
-            }, { Create("UICorner", {CornerRadius = UDim.new(1, 0)}) })
+            }, {
+                Create("UICorner", {CornerRadius = UDim.new(1, 0)})
+            })
             local Fill = Create("Frame", {
                 Size = UDim2.fromScale((default - min) / (max - min), 1),
                 BackgroundColor3 = Color3.fromRGB(80, 150, 255),
                 Parent = Tray
-            }, { Create("UICorner", {CornerRadius = UDim.new(1, 0)}) })
+            }, {
+                Create("UICorner", {CornerRadius = UDim.new(1, 0)})
+            })
             local Knob = Create("Frame", {
                 Size = UDim2.fromOffset(8, 8),
                 AnchorPoint = Vector2.new(0.5, 0.5),
@@ -588,9 +547,22 @@ function Library:New(config)
                 callback(val)
             end
             local dragging = false
-            SliderBg.InputBegan:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 then dragging = true Update(i) end end)
-            UIS.InputChanged:Connect(function(i) if dragging and i.UserInputType == Enum.UserInputType.MouseMovement then Update(i) end end)
-            UIS.InputEnded:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end end)
+            SliderBg.InputBegan:Connect(function(i)
+                if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+                    dragging = true
+                    Update(i)
+                end
+            end)
+            UIS.InputChanged:Connect(function(i)
+                if dragging and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then
+                    Update(i)
+                end
+            end)
+            UIS.InputEnded:Connect(function(i)
+                if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+                    dragging = false
+                end
+            end)
         end
 
         function Tab:Dropdown(config)
@@ -666,9 +638,7 @@ function Library:New(config)
             local function Select(v, btn)
                 DropHighlight.Visible = true
                 local targetY = btn.AbsolutePosition.Y - Content.AbsolutePosition.Y
-                TweenService:Create(DropHighlight, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-                    Position = UDim2.fromOffset(0, targetY)
-                }):Play()
+                TweenService:Create(DropHighlight, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), { Position = UDim2.fromOffset(0, targetY) }):Play()
                 for _, o in pairs(OptionHolder:GetChildren()) do
                     if o:IsA("TextButton") then
                         TweenService:Create(o, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(150, 150, 170)}):Play()
@@ -689,7 +659,9 @@ function Library:New(config)
                     LayoutOrder = i,
                     Parent = OptionHolder
                 })
-                Opt.MouseButton1Click:Connect(function() Select(v, Opt) end)
+                Opt.MouseButton1Click:Connect(function()
+                    Select(v, Opt)
+                end)
                 if default and v == default then
                     task.spawn(function()
                         repeat task.wait() until Opt.AbsolutePosition.Y > 0
@@ -699,9 +671,7 @@ function Library:New(config)
             end
             Header.MouseButton1Click:Connect(function()
                 expanded = not expanded
-                TweenService:Create(DropdownBg, TweenInfo.new(0.4, Enum.EasingStyle.Quart), {
-                    Size = UDim2.new(1, 0, 0, expanded and (45 + #list * 32 + 10) or 45)
-                }):Play()
+                TweenService:Create(DropdownBg, TweenInfo.new(0.4, Enum.EasingStyle.Quart), { Size = UDim2.new(1, 0, 0, expanded and (45 + #list * 32 + 10) or 45) }):Play()
                 TweenService:Create(Arrow, TweenInfo.new(0.4), {Rotation = expanded and 180 or 0}):Play()
             end)
         end
@@ -732,7 +702,10 @@ function Library:New(config)
             })
             local function Resize()
                 local ts = TextService:GetTextSize(
-                    Text.Text, Text.TextSize, Text.Font, Vector2.new(Text.AbsoluteSize.X, 10000)
+                    Text.Text,
+                    Text.TextSize,
+                    Text.Font,
+                    Vector2.new(Text.AbsoluteSize.X, 10000)
                 )
                 LabelBg.Size = UDim2.new(1, 0, 0, ts.Y + 16)
                 Text.Size = UDim2.new(1, -30, 0, ts.Y)
@@ -785,7 +758,10 @@ function Library:New(config)
             })
             local function Resize()
                 local ts = TextService:GetTextSize(
-                    Desc.Text, Desc.TextSize, Desc.Font, Vector2.new(Desc.AbsoluteSize.X, 10000)
+                    Desc.Text,
+                    Desc.TextSize,
+                    Desc.Font,
+                    Vector2.new(Desc.AbsoluteSize.X, 10000)
                 )
                 SectionBg.Size = UDim2.new(1, 0, 0, ts.Y + 50)
                 Desc.Size = UDim2.new(1, -30, 0, ts.Y)
@@ -908,18 +884,12 @@ function Library:New(config)
                 Parent = InputHolder
             })
             Input.Focused:Connect(function()
-                TweenService:Create(InputHolder, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-                    Size = UDim2.new(0, 180, 0, 26),
-                    Position = UDim2.new(1, -195, 0.5, -13)
-                }):Play()
+                TweenService:Create(InputHolder, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), { Size = UDim2.new(0, 180, 0, 26), Position = UDim2.new(1, -195, 0.5, -13) }):Play()
                 TweenService:Create(InputHolder:FindFirstChildOfClass("UIStroke"), TweenInfo.new(0.4), {Color = Color3.fromRGB(80, 150, 255)}):Play()
                 TweenService:Create(Label, TweenInfo.new(0.4), {TextTransparency = 0.5}):Play()
             end)
             Input.FocusLost:Connect(function(enterPressed)
-                TweenService:Create(InputHolder, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-                    Size = UDim2.new(0, 60, 0, 26),
-                    Position = UDim2.new(1, -75, 0.5, -13)
-                }):Play()
+                TweenService:Create(InputHolder, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), { Size = UDim2.new(0, 60, 0, 26), Position = UDim2.new(1, -75, 0.5, -13) }):Play()
                 TweenService:Create(InputHolder:FindFirstChildOfClass("UIStroke"), TweenInfo.new(0.4), {Color = Color3.fromRGB(50, 50, 70)}):Play()
                 TweenService:Create(Label, TweenInfo.new(0.4), {TextTransparency = 0}):Play()
                 callback(Input.Text, enterPressed)
