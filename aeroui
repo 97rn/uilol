@@ -63,11 +63,6 @@ function Library:New(config)
         Create("UIStroke", {Color = Color3.fromRGB(60, 120, 255), Thickness = 1.8, Transparency = 0.4})
     })
     
-    self.ReopenLabel.MouseButton1Click:Connect(function()
-        self.ReopenLabel.Visible = false
-        restoreUI()
-    end)
-    
     self.Top = Create("Frame", {
         Size = UDim2.new(1, 0, 0, 55),
         BackgroundColor3 = Color3.fromRGB(20, 20, 28),
@@ -125,6 +120,11 @@ function Library:New(config)
             Position = UDim2.fromScale(0.5, 0.5)
         }):Play()
     end
+    
+    self.ReopenLabel.MouseButton1Click:Connect(function()
+        self.ReopenLabel.Visible = false
+        restoreUI()
+    end)
     
     MinimizeBtn.MouseButton1Click:Connect(function()
         if IsMinimized then restoreUI() else minimizeUI() end
