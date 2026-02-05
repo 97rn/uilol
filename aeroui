@@ -12,13 +12,12 @@ end
 
 local Library = {}
 Library.__index = Library
-Library.ToggleKey = Enum.KeyCode.RightShift
 
 function Library.SettingManager()
     local Manager = {}
     function Manager:AddToTab(tab)
         tab:Paragraph({ Title = "UI Settings", Content = "Manage the interface settings and keybindings here." })
-        tab:Keybind({ Name = "UI Toggle Key", Default = Library.ToggleKey, OnChange = function(New) Library.ToggleKey = New end })
+        tab:Keybind({ Name = "UI Toggle Key", Default = Enum.KeyCode.RightShift, OnChange = function(New) end })
         tab:Button({ Name = "Unload UI", Callback = function()
             local core = gethui() or Player:WaitForChild("PlayerGui")
             local gui = core:FindFirstChild("DcusHub_v2.3 UI")
@@ -127,13 +126,10 @@ function Library:New(config)
     end)
     
     MinimizeBtn.MouseButton1Click:Connect(function()
-        if IsMinimized then restoreUI() else minimizeUI() end
-    end)
-    
-    UIS.InputBegan:Connect(function(input, gpe)
-        if gpe then return end
-        if input.KeyCode == Library.ToggleKey then
-            if IsMinimized then restoreUI() else minimizeUI() end
+        if IsMinimized then 
+            restoreUI() 
+        else 
+            minimizeUI() 
         end
     end)
     
