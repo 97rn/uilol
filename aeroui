@@ -42,7 +42,6 @@ function Library:New(config)
         Create("UICorner", {CornerRadius = UDim.new(0, 12)}),
         Create("UIStroke", {Color = Color3.fromRGB(45, 45, 60), Thickness = 1.5})
     })
-
     self.ReopenLabel = Create("TextButton", {
         Name = "AeroReopen",
         Size = UDim2.new(0, 220, 0, 45),
@@ -60,12 +59,10 @@ function Library:New(config)
         Create("UICorner", {CornerRadius = UDim.new(0, 10)}),
         Create("UIStroke", {Color = Color3.fromRGB(60, 120, 255), Thickness = 2, Transparency = 0.3})
     })
-
     self.ReopenLabel.MouseButton1Click:Connect(function()
         restoreUI()
         self.ReopenLabel.Visible = false
     end)
-
     self.Top = Create("Frame", {
         Size = UDim2.new(1, 0, 0, 55),
         BackgroundColor3 = Color3.fromRGB(20, 20, 28),
@@ -76,7 +73,6 @@ function Library:New(config)
     })
     Create("TextLabel", { Text = config.Title or "Dcus Hub", Font = Enum.Font.GothamBold, TextSize = 18, TextColor3 = Color3.fromRGB(255, 255, 255), TextXAlignment = Enum.TextXAlignment.Left, BackgroundTransparency = 1, Position = UDim2.fromOffset(18, 8), Size = UDim2.new(0, 200, 0, 30), Parent = self.Top })
     Create("TextLabel", { Text = config.Footer or "Premium Interface • v2.3", Font = Enum.Font.GothamMedium, TextSize = 11, TextColor3 = Color3.fromRGB(100, 100, 130), TextXAlignment = Enum.TextXAlignment.Left, BackgroundTransparency = 1, Size = UDim2.new(0, 200, 0, 20), Position = UDim2.fromOffset(18, 28), Parent = self.Top })
-
     local function createControlButton(text, posX, callback, color)
         local btn = Create("TextButton", {
             Text = text,
@@ -92,12 +88,9 @@ function Library:New(config)
         btn.MouseButton1Click:Connect(callback)
         return btn
     end
-
     local MinimizeBtn = createControlButton("−", -80, function() end, Color3.fromRGB(220,180,60))
     local CloseBtn = createControlButton("×", -45, function() self.Gui:Destroy() end, Color3.fromRGB(220,70,70))
-
     local IsMinimized = false
-
     local function minimizeUI()
         if IsMinimized then return end
         IsMinimized = true
@@ -112,7 +105,6 @@ function Library:New(config)
         end)
         self:Notify({Title = "UI Minimized", Content = "Tap the top label to reopen", Time = 5})
     end
-
     local function restoreUI()
         if not IsMinimized then return end
         IsMinimized = false
@@ -123,18 +115,15 @@ function Library:New(config)
         }):Play()
         self.ReopenLabel.Visible = false
     end
-
     MinimizeBtn.MouseButton1Click:Connect(function()
         if IsMinimized then restoreUI() else minimizeUI() end
     end)
-
     UIS.InputBegan:Connect(function(input, gpe)
         if gpe then return end
         if input.KeyCode == Library.ToggleKey then
             if IsMinimized then restoreUI() else minimizeUI() end
         end
     end)
-
     self.Container = Create("Frame", {
         Size = UDim2.new(1, 0, 1, -55),
         Position = UDim2.fromOffset(0, 55),
@@ -143,7 +132,6 @@ function Library:New(config)
         Visible = true,
         Parent = self.Main
     })
-
     self.Sidebar = Create("Frame", {
         Size = UDim2.new(0, 150, 1, -16),
         Position = UDim2.fromOffset(10, 8),
@@ -153,7 +141,6 @@ function Library:New(config)
         Create("UICorner", {CornerRadius = UDim.new(0, 10)}),
         Create("UIStroke", {Color = Color3.fromRGB(45, 45, 60), Thickness = 1})
     })
-
     self.TabHighlight = Create("Frame", {
         Size = UDim2.new(1, -16, 0, 34),
         Position = UDim2.fromOffset(8, 8),
@@ -166,7 +153,6 @@ function Library:New(config)
         Create("UICorner", {CornerRadius = UDim.new(0, 8)}),
         Create("UIStroke", {Color = Color3.fromRGB(80, 150, 255), Thickness = 1, Transparency = 0.6})
     })
-
     self.TabHolder = Create("Frame", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
@@ -176,14 +162,12 @@ function Library:New(config)
         Create("UIListLayout", {Padding = UDim.new(0, 5)}),
         Create("UIPadding", {PaddingTop = UDim.new(0, 8), PaddingLeft = UDim.new(0, 8), PaddingRight = UDim.new(0, 8)})
     })
-
     self.Pages = Create("Frame", {
         Size = UDim2.new(1, -180, 1, -16),
         Position = UDim2.fromOffset(170, 8),
         BackgroundTransparency = 1,
         Parent = self.Container
     })
-
     do
         local dragging, dragStart, startPos
         local function update(input)
@@ -206,7 +190,6 @@ function Library:New(config)
             end
         end)
     end
-
     function self:Notify(config)
         local title = config.Title or "Notification"
         local content = config.Content or ""
@@ -290,7 +273,6 @@ function Library:New(config)
             task.delay(0.6, function() Notif:Destroy() end)
         end)
     end
-
     function self:NewTab(name)
         local Tab = {}
         local TabBg = Create("Frame", {
@@ -334,7 +316,6 @@ function Library:New(config)
         end
         UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(UpdateCanvasSize)
         task.spawn(UpdateCanvasSize)
-
         TabBtn.MouseButton1Click:Connect(function()
             self.TabHighlight.Visible = true
             local yPos = TabBg.AbsolutePosition.Y - self.Sidebar.AbsolutePosition.Y
@@ -350,7 +331,6 @@ function Library:New(config)
             TweenService:Create(TabBtn, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
             TweenService:Create(Dot, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(80, 150, 255)}):Play()
         end)
-
         function Tab:Button(config)
             local text = config.Name or config.Text or "Button"
             local callback = config.Callback or function() end
@@ -379,7 +359,6 @@ function Library:New(config)
                 callback()
             end)
         end
-
         function Tab:Toggle(config)
             local text = config.Name or "Toggle"
             local callback = config.Callback or function() end
@@ -426,7 +405,6 @@ function Library:New(config)
             end
             return ToggleFunctions
         end
-
         function Tab:Slider(config)
             local text = config.Name or "Slider"
             local min = config.Min or 0
@@ -492,7 +470,6 @@ function Library:New(config)
                 end
             end)
         end
-
         function Tab:Dropdown(config)
             local text = config.Name or "Dropdown"
             local list = config.List or {}
@@ -554,7 +531,6 @@ function Library:New(config)
                 TweenService:Create(Arrow, TweenInfo.new(0.4), {Rotation = expanded and 180 or 0}):Play()
             end)
         end
-
         function Tab:Label(config)
             local text = config.Text or "Label"
             local LabelBg = Create("Frame", {
@@ -587,7 +563,6 @@ function Library:New(config)
             Text:GetPropertyChangedSignal("AbsoluteSize"):Connect(Resize)
             task.spawn(Resize)
         end
-
         function Tab:Paragraph(config)
             local title = config.Title or "Paragraph Title"
             local content = config.Content or "Content description goes here."
@@ -622,7 +597,6 @@ function Library:New(config)
             Desc:GetPropertyChangedSignal("AbsoluteSize"):Connect(Resize)
             task.spawn(Resize)
         end
-
         function Tab:Keybind(config)
             local text = config.Name or "Keybind"
             local default = config.Default or Enum.KeyCode.E
@@ -672,7 +646,6 @@ function Library:New(config)
                 end
             end)
         end
-
         function Tab:Textbox(config)
             local text = config.Name or "Textbox"
             local placeholder = config.Placeholder or "Enter..."
@@ -685,7 +658,17 @@ function Library:New(config)
                 Create("UICorner", {CornerRadius = UDim.new(0, 8)}),
                 Create("UIStroke", {Color = Color3.fromRGB(45, 45, 60), Thickness = 1})
             })
-            Create("TextLabel", {Text = text, Font = Enum.Font.GothamMedium, TextSize = 13, TextColor3 = Color3.fromRGB(200, 200, 220), BackgroundTransparency = 1, Position = UDim2.fromOffset(15, 0), Size = UDim2.new(1, -80, 1, 0), TextXAlignment = Enum.TextXAlignment.Left, Parent = BoxBg})
+            local TitleLabel = Create("TextLabel", {
+                Text = text,
+                Font = Enum.Font.GothamMedium,
+                TextSize = 13,
+                TextColor3 = Color3.fromRGB(200, 200, 220),
+                BackgroundTransparency = 1,
+                Position = UDim2.fromOffset(15, 0),
+                Size = UDim2.new(1, -80, 1, 0),
+                TextXAlignment = Enum.TextXAlignment.Left,
+                Parent = BoxBg
+            })
             local InputHolder = Create("Frame", {
                 Size = UDim2.new(0, 60, 0, 26),
                 Position = UDim2.new(1, -75, 0.5, -13),
@@ -711,19 +694,17 @@ function Library:New(config)
             Input.Focused:Connect(function()
                 TweenService:Create(InputHolder, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 180, 0, 26), Position = UDim2.new(1, -195, 0.5, -13)}):Play()
                 TweenService:Create(InputHolder:FindFirstChildOfClass("UIStroke"), TweenInfo.new(0.4), {Color = Color3.fromRGB(80, 150, 255)}):Play()
-                TweenService:Create(Label, TweenInfo.new(0.4), {TextTransparency = 0.5}):Play()
+                TweenService:Create(TitleLabel, TweenInfo.new(0.4), {TextTransparency = 0.5}):Play()
             end)
             Input.FocusLost:Connect(function(enterPressed)
                 TweenService:Create(InputHolder, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 60, 0, 26), Position = UDim2.new(1, -75, 0.5, -13)}):Play()
                 TweenService:Create(InputHolder:FindFirstChildOfClass("UIStroke"), TweenInfo.new(0.4), {Color = Color3.fromRGB(50, 50, 70)}):Play()
-                TweenService:Create(Label, TweenInfo.new(0.4), {TextTransparency = 0}):Play()
+                TweenService:Create(TitleLabel, TweenInfo.new(0.4), {TextTransparency = 0}):Play()
                 callback(Input.Text, enterPressed)
             end)
         end
-
         return Tab
     end
-
     return self
 end
 
