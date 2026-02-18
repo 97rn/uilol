@@ -31,7 +31,7 @@ function Library:New(config)
 	local self = setmetatable({}, Library)
 	self.Gui = Create("ScreenGui", {Name = "DcusHub_v2.3 UI", ResetOnSpawn = false, Parent = gethui()})
 	self.Main = Create("Frame", {
-		Size = UDim2.fromOffset(565, 392),
+		Size = UDim2.fromOffset(585, 410),
 		Position = UDim2.fromScale(0.5, 0.5),
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		BackgroundColor3 = Color3.fromRGB(15, 15, 20),
