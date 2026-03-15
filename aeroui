@@ -59,8 +59,8 @@ function Library:New(config)
 		Text = Color3.fromRGB(235, 235, 240),
 		TextDim = Color3.fromRGB(165, 165, 175),
 		TextMuted = Color3.fromRGB(110, 110, 125),
-		Accent = Color3.fromRGB(45, 45, 50),
-		AccentSoft = Color3.fromRGB(60, 60, 66),
+		Accent = Color3.fromRGB(20, 20, 22),
+		AccentSoft = Color3.fromRGB(35, 35, 38),
 	}
 
 	self = setmetatable({}, Library)
