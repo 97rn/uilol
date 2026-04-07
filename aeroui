@@ -59,8 +59,8 @@ function Library:New(config)
 		Text = Color3.fromRGB(235, 235, 240),
 		TextDim = Color3.fromRGB(165, 165, 175),
 		TextMuted = Color3.fromRGB(110, 110, 125),
-		Accent = Color3.fromRGB(20, 20, 22),
-		AccentSoft = Color3.fromRGB(35, 35, 38),
+		Accent = Color3.fromRGB(45, 45, 50),
+		AccentSoft = Color3.fromRGB(60, 60, 66),
 	}
 
 	self = setmetatable({}, Library)
@@ -73,7 +73,7 @@ function Library:New(config)
 	})
 
 	self.Main = Create("Frame", {
-		Size = UDim2.fromOffset(585, 410),
+		Size = UDim2.fromOffset(700, 500),
 		Position = UDim2.fromScale(0.5, 0.5),
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		BackgroundColor3 = THEME.MainBg,
@@ -230,7 +230,7 @@ function Library:New(config)
 	})
 
 	self.Sidebar = Create("Frame", {
-		Size = UDim2.new(0, 150, 1, -16),
+		Size = UDim2.new(0, 170, 1, -16)
 		Position = UDim2.fromOffset(10, 8),
 		BackgroundColor3 = THEME.PanelBg,
 		ZIndex = 11,
